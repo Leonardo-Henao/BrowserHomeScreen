@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Screen - Sr. Leonardo</title>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Poppins&family=Agbalumo&display=swap');
+
+      :root {
+        --text_color_list_pines: #fff;
+        --radius_border: 10px;
+        --background_color_list_bookmarks: #000;
+        --background_opacity_list_bookmarks: 0.2;
+      }
+
+      body {
+        padding: 0;
+        margin: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: black;
+        color: var(--text_color_list_pines);
+        font-size: 1rem;
+      }
+
+      h2 {
+        font-size: 2rem;
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+        font-family: 'Agbalumo';
+      }
+
+      .caption {
+        display: block;
+        color: gray;
+        font-size: 0.8rem;
+        text-align: end;
+      }
+
+      #img_background {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: -1;
+
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        opacity: 0.5;
+      }
+
+      /* #region Header */
+
+      header {
+        /* margin-bottom: 1rem; */
+      }
+
+      header .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      input {
+        padding: 0.5rem;
+        border-radius: 0.5rem;
+        border: 1px solid gray;
+        width: 500px;
+
+        transition: all 0.2s ease-in-out;
+      }
+
+      input:focus {
+        font-size: 1.5rem;
+        width: 600px;
+      }
+
+      .list_searchers {
+        padding: 0.3rem;
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .list_searchers img {
+        width: 1.6rem;
+        padding: 0.2rem;
+      }
+
+      #icon_duck,
+      #icon_bing,
+      #icon_google {
+        display: none;
+      }
+
+      /* #endregion Header */
+
+      /* #region Aside */
+
+      aside {
+        font-family: 'Poppins';
+        margin: 0 0 0 auto;
+        padding: 0 2rem;
+        /* text-transform: uppercase; */
+      }
+
+      aside h3 {
+        font-size: 1.8rem;
+        text-align: end;
+        line-height: 105%;
+      }
+
+      /* #endregion Aside */
+
+      main {
+        display: flex;
+        flex-direction: column;
+
+        width: 80%;
+        margin-bottom: 1rem;
+      }
+
+      /* #region Bookmarks  */
+
+      .list_bookmarks {
+        padding: 15px;
+        position: relative;
+      }
+
+      .list_bookmarks-background {
+        z-index: -1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+
+        background-color: var(--background_color_list_bookmarks);
+
+        border-radius: var(--radius_border);
+        opacity: var(--background_opacity_list_bookmarks);
+      }
+
+      .list_bookmarks-pines {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .pin-ref {
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+
+        width: 4.5rem;
+        border-radius: 4px;
+        padding: 10px;
+        margin: 0.3rem;
+        justify-content: center;
+        align-items: center;
+
+        color: var(--text_color_list_pines);
+        text-decoration: none;
+
+        overflow: hidden;
+      }
+
+      .pin-name {
+        display: block;
+        font-family: 'Poppins', sans-serif;
+        user-select: none;
+
+        white-space: nowrap;
+        width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 0.8rem;
+        text-align: center;
+      }
+
+      .pin-icon {
+        display: block;
+        width: 38px;
+        margin: 0.2rem;
+      }
+
+      .pin-ref::before {
+        content: '';
+        z-index: -1;
+
+        position: absolute;
+        top: -20px;
+        left: 0;
+
+        height: 200%;
+        width: 25px;
+
+        background-image: linear-gradient(
+          to right,
+          transparent,
+          var(--text_color_list_pines),
+          transparent
+        );
+
+        opacity: 0;
+        transform-origin: top;
+        transform: rotateZ(45deg);
+      }
+
+      .pin-ref:hover::before {
+        animation: anim-hover-mouse 0.3s linear 1;
+      }
+
+      @keyframes anim-hover-mouse {
+        0% {
+          opacity: 0.3;
+        }
+
+        100% {
+          left: 200%;
+        }
+      }
+
+      /* #endregion bookmarks  */
+    </style>
+  </head>
+
+  <body id="body">
+    <div id="img_background"></div>
+    <aside>
+      <h3 id="time_hour">1</h3>
+    </aside>
+    <header>
+      <h2>Search</h2>
+      <div class="content">
+        <form action="javascript:searchOn()" method="get">
+          <input
+            type="text"
+            name="search_query"
+            id="search_query"
+            autocomplete="off"
+            placeholder="Ej: Small very beautiful dogs..." />
+        </form>
+        <div class="list_searchers">
+          <img
+            id="icon_duck"
+            loading="lazy"
+            src="https://duckduckgo.com/assets/icons/meta/DDG-icon_256x256.png"
+            alt="icon duckduckgo" />
+
+          <img
+            id="icon_bing"
+            loading="lazy"
+            src="https://www.bing.com/sa/simg/favicon-trans-bg-blue-mg-png.png"
+            alt="icon bing" />
+
+          <img
+            id="icon_google"
+            loading="lazy"
+            src="https://logopng.com.br/logos/google-37.svg"
+            alt="icon google" />
+        </div>
+      </div>
+      <span class="caption">Press [ENTER] to search</span>
+    </header>
+    <main id="container-bookmarks">
+      <h2 class="bookmarks-title">Bookmarks</h2>
+      <article class="list_bookmarks" id="list_bookmarks">
+        <div class="list_bookmarks-background"></div>
+        <div class="list_bookmarks-pines" id="list_bookmarks-pines"></div>
+      </article>
+    </main>
+  </body>
+
+  <script>
+    // Script for functions
+
+    // #region private functions
+
+    // page - website to get the icon. EJ: https://www.youtube.com
+    const getIconWebPage = (page) => {
+      const pathFavicons = 'https://www.google.com/s2/favicons?domain=';
+      const pathSize = '&sz=128';
+
+      return `${pathFavicons}${page}${pathSize}`;
+    };
+
+    // get wallpaper from unsplash
+    const getWallpaper = async () => {
+      const nameLocalStorageUpdate = 'last_update';
+      const nameLocalStorageUrlBackground = 'img_background';
+
+      const dataLocal = localStorage.getItem(nameLocalStorageUpdate);
+      const dateToday = new Date().getDate();
+
+      const params = new URLSearchParams(new URL(window.location.href).search);
+
+      var apiKeyUnsplash = params.get('unsplash_key');
+      var topicUnsplash = params.get('unsplash_topic');
+
+      if (dataLocal == null || dataLocal != dateToday) {
+        let url = `https://api.unsplash.com/photos/random/?client_id=${apiKeyUnsplash}&count=1&orientation=landscape&topic=${topicUnsplash}`;
+
+        const dataFetch = fetch(url).then((x) => x.json());
+        const urlWallpaper = await dataFetch.then((x) => x[0].urls.full);
+
+        const itemBackground = document.getElementById('img_background');
+        itemBackground.style = `background-image: url(${urlWallpaper})`;
+
+        localStorage.setItem(nameLocalStorageUpdate, dateToday);
+        localStorage.setItem(nameLocalStorageUrlBackground, urlWallpaper);
+      } else {
+        const urlWallpaper = localStorage.getItem(
+          nameLocalStorageUrlBackground,
+        );
+        const itemBackground = document.getElementById('img_background');
+        itemBackground.style = `background-image: url(${urlWallpaper})`;
+      }
+    };
+
+    // create all bookmarks
+    const createView = (bookmark) => {
+      var PinList = document.getElementById('list_bookmarks-pines');
+
+      const aPin = document.createElement('a');
+      aPin.classList.add('pin-ref');
+      aPin.href = bookmark.url;
+      // aPin.target = "_blank"
+
+      const imgPin = document.createElement('img');
+      imgPin.classList.add('pin-icon');
+      imgPin.loading = 'lazy';
+      imgPin.src = bookmark.img;
+
+      const namePin = document.createElement('span');
+      namePin.classList.add('pin-name');
+      namePin.innerHTML = bookmark.name;
+
+      aPin.append(imgPin, namePin);
+      PinList.appendChild(aPin);
+    };
+
+    // searcher
+    const searchOn = () => {
+      const valueToSearch = document.getElementById('search_query');
+      const valueToSearchClean = valueToSearch.value.replaceAll(' ', '+');
+
+      switch (useSearcher) {
+        // 1 Google - 2 Bing - 3 Duck
+        case 1:
+          window.location.href = `https://google.com/search?q=${valueToSearchClean}`;
+          break;
+        case 2:
+          window.location.href = `https://bing.com/search?q=${valueToSearchClean}`;
+          break;
+        case 3:
+          window.location.href = `https://duckduckgo.com?q=${valueToSearchClean}`;
+          break;
+      }
+    };
+
+    // Show icon to default searcher
+    const setDefaultSearch = (searcher) => {
+      switch (searcher) {
+        // 1 Google - 2 Bing - 3 Duck
+        case 1:
+          document.getElementById('icon_google').style.display = 'block';
+          break;
+        case 2:
+          document.getElementById('icon_bing').style.display = 'block';
+          break;
+        case 3:
+          document.getElementById('icon_duck').style.display = 'block';
+          break;
+      }
+    };
+
+    // Set time and date
+    const setTime = () => {
+      const timeClock = document.getElementById('time_hour');
+
+      const date = new Date();
+      const dateParseCalendar = date.toLocaleDateString('es-co', {
+        weekday: 'long',
+        year: '2-digit',
+        month: 'short',
+        day: '2-digit',
+      });
+      const dateParseTime = date.toLocaleString('es-co', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+
+      timeClock.innerHTML = `${dateParseTime} <br>${dateParseCalendar}`;
+    };
+
+    // #endregion
+  </script>
+
+  <script>
+    // Script for configurations
+
+    // 1 Google - 2 Bin - 3 Duck
+    const useSearcher = 1;
+
+    const bookmarks = [
+      {
+        name: 'Youtube',
+        url: 'https://youtube.com',
+        img: getIconWebPage('https://www.youtube.com'),
+      },
+      {
+        name: 'Youtube Music',
+        url: 'https://music.youtube.com',
+        img: getIconWebPage('https://music.youtube.com'),
+      },
+      {
+        name: 'Spotify',
+        url: 'https://open.spotify.com/',
+        img: getIconWebPage('https://spotify.com'),
+      },
+      {
+        name: 'Gmail',
+        url: 'https://mail.google.com/mail/u/0/#inbox',
+        img: `https://ssl.gstatic.com/ui/v1/icons/mail/rfr/gmail.ico`,
+      },
+      {
+        name: 'ChatGPT',
+        url: 'https://chat.openai.com',
+        img: getIconWebPage('https://chat.openai.com'),
+      },
+      {
+        name: 'Github',
+        url: 'https://github.com/leonardo-henao',
+        img: `https://github.com/fluidicon.png`,
+      },
+      {
+        name: 'Discord',
+        url: 'https://discord.com/',
+        img: getIconWebPage('https://discord.com/'),
+      },
+      {
+        name: 'IPTV Lists Admin',
+        url: 'https://iptvlistasm3u.com/',
+        img: `https://iptvlistasm3u.com/favicon.svg`,
+      },
+    ];
+
+    // Don't touch this methods
+    getWallpaper();
+
+    bookmarks.map((p) => createView(p));
+
+    setDefaultSearch(useSearcher);
+
+    setTime();
+  </script>
+</html>
